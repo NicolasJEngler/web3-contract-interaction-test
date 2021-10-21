@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import Web3Service from './services/Web3Service';
@@ -23,7 +23,8 @@ function App() {
       });
   }
 
-  const [walletAddress, setWalletAddress] = useState(null);
+  const [walletAddress, setWalletAddress] = useState(null),
+        [currentChain, setCurrentChain] = useState(null);
 
   // We create a mint function on our front-end 
   // (different from the mint function available in the contract interface)
@@ -36,12 +37,45 @@ function App() {
       });
   };
 
+  const detectChain = () => {
+    web3.eth.net.getId().then((chain) => {
+      setCurrentChain(chain);
+    });
+  }
+
+  const addPolygonMumbai = () => {
+    Web3Service.addPolygonMumbaiRPC()
+      .then((error) => {
+        detectChain();
+      });
+  };
+
+  useEffect(() => {
+    detectChain();
+  }, []);
+
   return (
     <div className="App">
+      <h4>You're currently on chain ID: {currentChain}</h4>
+
+      <p><button onClick={detectChain}>Detect chain again!</button></p>
+
+      <ul style={{maxWidth: 320, margin: 'auto', textAlign: 'left'}}>
+        <li>Ethereum Mainnet - 1</li>
+        <li>Ethereum Testnet Rinkeby - 4</li>
+        <li>Polygon Matic Mainnet - 137</li>
+        <li>Polygon Matic Testnet Mumbai - 80001</li>
+      </ul>
+
+      <p><button onClick={addPolygonMumbai}>Add RPC for Polygon Testnet (Mumbai)</button></p>
+
+      <hr />
+
+
       {
         walletAddress ? 
-          <p>Connected wallet address: {walletAddress}</p> :
-          <p>Please, connect your wallet</p>
+          <h4>Connected wallet address: {walletAddress}</h4> :
+          <h4>Please, connect your wallet</h4>
       }
 
       {

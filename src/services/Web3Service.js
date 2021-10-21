@@ -13,6 +13,25 @@ class Web3Service {
       return accountAddress;
     }
   }
+
+  async addPolygonMumbaiRPC() {
+    if (window.ethereum) {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{ 
+          chainId: '0x13881', // A 0x-prefixed hexadecimal string (80001 for Mumbai)
+          chainName: 'Matic (Polygon) Testnet Mumbai',
+          nativeCurrency: {
+            name: 'MATIC',
+            symbol: 'tMATIC', // 2-6 characters long
+            decimals: 18,
+          },
+          rpcUrls: ['https://rpc-mumbai.matic.today'],
+          blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+        }],
+      })
+    }
+  }
 }
 
 const instance = new Web3Service();
