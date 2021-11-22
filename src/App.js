@@ -41,6 +41,13 @@ function App() {
       });
   };
 
+  const setApprovalForAll = (operator, approved) => {
+    mintingContract.methods.setApprovalForAll(operator, approved)
+      .send({
+        from: walletAddress
+      });
+  };
+
   const listEnglishAuction = (nftContractAddress, nftTokenId, endDate, floorPrice) => {
     marketplaceContract.methods.createListing(nftContractAddress, nftTokenId, endDate, floorPrice)
       .send({
@@ -74,13 +81,27 @@ function App() {
       <br />
 
       {
+        // This approves transactions for all tokens of the minting contract
+        // to be able to be sold in marketplace contracts. setApprovalForAll lives
+        // in the minting contract.
+        walletAddress ? 
+          <button onClick={() => {setApprovalForAll(
+            '0xEC17ce447fD60Eab2ec6cB8C1438f607a3E06935', // Marketplace contract address
+            true
+          )}}>Approve tokens for transactions</button> :
+          null
+      }
+
+      <br />
+
+      {
         // This call to the front-end marketplace listing function 
         // and passes token contract address and ID that wants to be sold
         // as well as end date for the auction and floor price in WEI
         walletAddress ? 
           <button onClick={() => {listEnglishAuction(
-            "0x2Aa0724852CdCbe74B7737075885d538896a1FaF",
-            119,
+            '0x2Aa0724852CdCbe74B7737075885d538896a1FaF',
+            131,
             Math.floor(new Date().getTime() / 1000) + 3600, // 3600s = 1h. Auction ends in 1 hour.
             Web3.utils.toWei('0.5', 'ether')
           )}}>List as English auction!</button> :
