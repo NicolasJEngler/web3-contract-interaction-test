@@ -38,11 +38,10 @@ function App() {
   // We create a mint function on our front-end 
   // (different from the mint function available in the contract interface)
   // Accepts a minterAddress, a tokenURI (could be an IPFS hash), and a *string* value for the NFT in ether
-  const mint = (minterAddress, tokenURI, nftValue) => {
+  const mint = (minterAddress, tokenURI) => {
     mintingContract.methods.mint(minterAddress, tokenURI)
       .send({
-        from: walletAddress, 
-        value: web3.utils.toWei(nftValue, 'ether')
+        from: walletAddress
       });
   };
 
@@ -136,7 +135,7 @@ function App() {
         // a hardcoded tokenURI of 3, but should be if possible an IPFS hash
         // and a value in ether as a string
         walletAddress ? 
-          <button onClick={() => {mint(walletAddress, tokenUri, String(tokenPrice))}}>Mint!</button> :
+          <button onClick={() => {mint(walletAddress, tokenUri)}}>Mint!</button> :
           null
       }
 
