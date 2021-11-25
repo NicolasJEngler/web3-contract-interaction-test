@@ -177,7 +177,7 @@ function App() {
             address,
             tokenId,
             Math.floor(new Date().getTime() / 1000) + 3600, // 3600s = 1h. Auction ends in 1 hour.
-            Web3.utils.toWei(String(tokenPrice), 'ether')
+            Web3.utils.toWei(String(tokenPrice), 'ether') // Floor price passed converted from Ether to Wei
           )}}>List as English auction!</button> :
           null
       }
